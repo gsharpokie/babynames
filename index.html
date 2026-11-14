@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Names in Fashion</title>
+<meta name="description" content="Nobody sells baby names, yet they go in and out of style like clothes. Chart any name’s popularity in the U.S. from 1880 to 2025.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gsharpokie.github.io/babynames/">
+<meta property="og:title" content="Names in Fashion">
+<meta property="og:description" content="Nobody sells baby names, yet they go in and out of style like clothes. Chart any name’s popularity in the U.S. from 1880 to 2025.">
+<meta property="og:image" content="https://gsharpokie.github.io/babynames/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Names in Fashion: a chart of how Linda, Jennifer and Jason rose and fell in popularity.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@gsharpokie">
+<meta name="twitter:title" content="Names in Fashion">
+<meta name="twitter:description" content="Nobody sells baby names, yet they go in and out of style like clothes. Chart any name’s popularity in the U.S. from 1880 to 2025.">
+<meta name="twitter:image" content="https://gsharpokie.github.io/babynames/preview.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23243b53'/%3E%3Cpath d='M4 24 C10 24 11 7 16 7 C21 7 22 24 28 24' fill='none' stroke='%23ffd166' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: one column. A name search with ready-made comparisons, one rank-over-time chart (1 at the top),
+   a table of the same lines, then a "top ten in any year" slider and context. */
+:root {
+  --paper: #f2f5f8; --surface: #ffffff; --ink: #1c2b3a; --muted: #586878; --line: #d5dce4;
+  --s1: #c4411f; --s2: #1f6fb2; --s3: #2e8b57; --s4: #8a4fb0;
+  --focus: #c4411f;
+  --display: "Nunito", "Segoe UI", system-ui, sans-serif;
+  --body: Aptos, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10171f; --surface: #19232e; --ink: #e8eef4; --muted: #9fb0c0; --line: #2f3d4b;
+    --s1: #ff8a66; --s2: #6db6f2; --s3: #6fd09a; --s4: #c99be8; --focus: #ff8a66; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10171f; --surface: #19232e; --ink: #e8eef4; --muted: #9fb0c0; --line: #2f3d4b;
+  --s1: #ff8a66; --s2: #6db6f2; --s3: #6fd09a; --s4: #c99be8; --focus: #ff8a66; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 1.05rem; line-height: 1.55; }
+.wrap { max-width: 50rem; margin: 0 auto; padding: 2rem 1rem 3rem; display: grid; gap: 1.6rem; }
+header { display: grid; gap: .45rem; }
+.kicker { font-size: .85rem; color: var(--muted); }
+.kicker a, footer a, .notes a, .prose a { color: var(--ink); }
+h1 { font-family: var(--display); font-weight: 900; font-size: clamp(2.3rem, 8vw, 3.5rem); line-height: 1; margin: 0; letter-spacing: -.01em; }
+h2 { font-family: var(--display); font-weight: 900; font-size: 1.45rem; line-height: 1.15; margin: 0; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 700; font-size: 1.1rem; margin: 0; }
+.lede { margin: 0; max-width: 62ch; color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.4rem; display: grid; gap: 1rem; }
+.label { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: .45rem; }
+.chips button { font: inherit; font-size: .92rem; padding: .4rem .8rem; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+.chips button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.search { position: relative; display: grid; gap: .3rem; }
+.search input { font: inherit; padding: .6rem .8rem; border-radius: 10px; border: 1px solid var(--muted); background: var(--surface); color: var(--ink); width: 100%; }
+.sugg { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.sugg button { font: inherit; font-size: .92rem; padding: .35rem .7rem; border-radius: 8px; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
+.picked { display: flex; flex-wrap: wrap; gap: .45rem; min-height: 2rem; }
+.pill { display: inline-flex; align-items: center; gap: .4rem; font-weight: 700; font-size: .92rem; padding: .25rem .3rem .25rem .7rem; border-radius: 999px; border: 2px solid; }
+.pill button { font: inherit; width: 1.6rem; height: 1.6rem; border-radius: 50%; border: none; background: var(--line); color: var(--ink); cursor: pointer; line-height: 1; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--muted); font-family: var(--body); font-size: 17px; font-variant-numeric: tabular-nums; }
+.chart text.lbl { font-weight: 700; font-size: 17px; }
+.msg { margin: 0; color: var(--muted); font-size: .92rem; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: .95rem; }
+th, td { text-align: right; padding: .4rem .5rem; border-bottom: 1px solid var(--line); }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: .8rem; color: var(--muted); font-weight: 600; }
+.tablewrap { overflow-x: auto; }
+.yearrow { display: flex; align-items: center; gap: 1rem; }
+.yearrow input { flex: 1; accent-color: var(--ink); height: 2rem; }
+.yearnum { font-family: var(--display); font-weight: 900; font-size: 2rem; font-variant-numeric: tabular-nums; min-width: 4ch; text-align: right; }
+.tops { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.tops ol { margin: .3rem 0 0; padding-left: 1.4rem; }
+.tops li button { font: inherit; background: none; border: none; padding: 0; color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); cursor: pointer; }
+.prose p, .prose ol { margin: 0 0 .7rem; max-width: 64ch; }
+.prose li { margin-bottom: .4rem; }
+.notes { font-size: .88rem; color: var(--muted); }
+footer { font-size: .85rem; color: var(--muted); }
+@media (max-width: 560px) { .card { padding: 1.1rem; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">A companion to <em>A Sociology Experiment</em>, Chapter 5: Culture · By Gwen Sharp · <a href="https://x.com/gsharpokie">@gsharpokie</a></div>
+    <h1>Names in Fashion</h1>
+    <p class="lede">No company sells baby names, and no ad tells parents what to pick. Yet names rise and fall like clothing styles, which makes them one of the cleanest ways to watch culture change. Look up your own name, or start with a comparison.</p>
+  </header>
+
+  <section class="card">
+    <h2>How popular was it?</h2>
+    <p class="label">Start with a comparison</p>
+    <div class="chips" id="sets"></div>
+    <div class="search">
+      <label for="q" class="label">Or add a name (up to 4)</label>
+      <input id="q" type="text" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Type a first name">
+      <ul class="sugg" id="sugg" aria-live="polite"></ul>
+    </div>
+    <div class="picked" id="picked" aria-live="polite"></div>
+    <div class="chart" id="chart"></div>
+    <p class="msg" id="msg">Rank among all babies of that sex born that year. 1 is the most popular. A line stops when the name falls out of the top 1,000.</p>
+    <div class="tablewrap"><table id="tbl"></table></div>
+  </section>
+
+  <section class="card">
+    <h2>The top ten in any year</h2>
+    <div class="yearrow"><input type="range" id="yr" min="1880" max="2025" value="1990" aria-label="Year"><span class="yearnum" id="yrNum">1990</span></div>
+    <div class="tops"><div><h3>Girls</h3><ol id="topG"></ol></div><div><h3>Boys</h3><ol id="topB"></ol></div></div>
+    <p class="msg">Select a name to add it to the chart.</p>
+  </section>
+
+  <section class="card prose">
+    <h2>What sociologists see in names</h2>
+    <p><strong>Fashion without a seller.</strong> Sociologist Stanley Lieberson studied names because nobody profits from them. When a name spreads, it’s spreading through people’s tastes and their sense of what other parents are choosing.</p>
+    <p><strong>Parents want a name that’s familiar but not too common.</strong> That’s why popular names burn out. Once a name is everywhere, it starts to sound like the last generation, and parents move on. Try Linda, Jennifer, and Jason.</p>
+    <p><strong>Names can change gender, usually in one direction.</strong> Ashley and Leslie were boys’ names first. Once many girls had them, parents mostly stopped giving them to boys. Try the “From boys to girls” comparison.</p>
+    <p><strong>Old names come back.</strong> Names tied to grandparents sound dated; names tied to great-grandparents can sound fresh. Emma, Hazel, Theodore, and Oliver all fell for decades before returning.</p>
+    <p><strong>Pop culture matters less than you’d think.</strong> Movies and shows can launch a name (Madison first appeared on the list in 1985, the year after the movie <em>Splash</em>), but Lieberson found that many names credited to a celebrity were already rising before the celebrity was famous.</p>
+    <p><strong>Names carry signals about class, race, and generation.</strong> In a well-known experiment, economists sent out identical résumés with different names; those with names more common among White Americans got more callbacks than those with names more common among Black Americans.</p>
+    <h3>Talk about it</h3>
+    <ol>
+      <li>Look up your own name and a parent’s or grandparent’s. What do the lines tell you about when each of you was born?</li>
+      <li>Girls’ names have changed faster than boys’ names for most of the past century. Why might parents feel freer to be creative with girls’ names?</li>
+      <li>Why do you think names move from boys to girls much more often than from girls to boys?</li>
+      <li>What does someone’s first name lead you to assume about their age, background, or family? Where did you learn those associations?</li>
+      <li>If nobody is selling names, what makes so many parents choose the same ones in the same years?</li>
+    </ol>
+  </section>
+
+  <section class="notes prose">
+    <h3>About the data</h3>
+    <p>Ranks are the Social Security Administration’s lists of the 1,000 most popular names for girls and for boys each year from 1880 to 2025, based on Social Security card applications for U.S. births. Different spellings count as different names (Sophia and Sofia). Many people born before 1937 never applied for a card, so the early years are less complete. The lists record sex as female or male, as it appears on the application.</p>
+    <p><strong>Sources:</strong> Social Security Administration, <a href="https://www.ssa.gov/oact/babynames/">“Popular Baby Names”</a>, compiled from Arul John’s <a href="https://github.com/aruljohn/popular-baby-names">copy of the SSA lists</a>. Lieberson, Stanley. 2000. <em>A Matter of Taste: How Names, Fashions, and Culture Change</em>. Yale University Press. Bertrand, Marianne and Sendhil Mullainathan. 2004. “Are Emily and Greg More Employable than Lakisha and Jamal?” <em>American Economic Review</em> 94(4): 991–1013.</p>
+    <h3>How to cite this page</h3>
+    <p>Sharp, Gwen. 2026. “Names in Fashion.” <a href="https://gsharpokie.github.io/babynames/">https://gsharpokie.github.io/babynames/</a></p>
+    <p>Spot an error? <a href="https://github.com/gsharpokie/babynames/issues/new">Suggest a correction</a> (needs a free GitHub account).</p>
+  </section>
+
+  <footer>Created by Gwen Sharp (<a href="https://x.com/gsharpokie">@gsharpokie</a>). Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>.</footer>
+</div>
+
+<script>
+const SETS = [
+  ["A name of its time", [["Linda", "g"], ["Jennifer", "g"], ["Jason", "b"]]],
+  ["From boys to girls", [["Ashley", "b"], ["Ashley", "g"], ["Leslie", "b"], ["Leslie", "g"]]],
+  ["Comebacks", [["Emma", "g"], ["Hazel", "g"], ["Theodore", "b"], ["Oliver", "b"]]],
+  ["Pop culture", [["Madison", "g"], ["Arya", "g"], ["Khaleesi", "g"]]],
+  ["Always there", [["Mary", "g"], ["Elizabeth", "g"], ["James", "b"], ["William", "b"]]]
+];
+const COLORS = ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)"];
+const DASH = ["", "7 4", "2 4", "10 3 2 3"];
+const SEX = { g: "girls", b: "boys" };
+const $ = id => document.getElementById(id);
+let D = null, picked = [];
+
+function decode(s) {           // "1880:5,6,7;1990:900" -> {year: rank}
+  const o = {};
+  s.split(";").forEach(run => { const [st, rs] = run.split(":"); rs.split(",").forEach((r, i) => o[+st + i] = +r); });
+  return o;
+}
+function stats(n, k) {
+  const d = decode(D[k][n]); const ys = Object.keys(d).map(Number);
+  const best = Math.min(...ys.map(y => d[y])); const by = ys.filter(y => d[y] === best);
+  return { d, best, first: by[0], last: by[by.length - 1], count: ys.length, y0: Math.min(...ys), y1: Math.max(...ys) };
+}
+const W = 640, L = 58, R = 14, T = 14, PH = 300, H = T + PH + 34;
+const x = y => L + (y - D.y0) * (W - L - R) / (D.y1 - D.y0);
+const yy = r => T + Math.log10(r) / 3 * PH;        // rank 1 at top, 1,000 at bottom (log scale)
+
+function draw() {
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Line chart of name rank by year, ${D.y0} to ${D.y1}. ${picked.map(([n, k]) => { const t = stats(n, k); return `${n} (${SEX[k]}) peaked at number ${t.best} in ${t.first}`; }).join(". ")}">`;
+  [1, 10, 100, 1000].forEach(r => s += `<line x1="${L}" x2="${W - R}" y1="${yy(r)}" y2="${yy(r)}" stroke="var(--line)"/><text x="${L - 8}" y="${yy(r) + 6}" text-anchor="end">${r === 1 ? "#1" : "#" + r.toLocaleString()}</text>`);
+  [1880, 1920, 1960, 2000, D.y1].forEach(v => s += `<text x="${x(v)}" y="${H - 6}" text-anchor="${v === D.y1 ? "end" : v === 1880 ? "start" : "middle"}">${v}</text>`);
+  picked.forEach(([n, k], i) => {
+    const d = stats(n, k).d; let p = "", prev = null;
+    for (let y = D.y0; y <= D.y1; y++) if (d[y]) { p += (prev === y - 1 ? "L" : "M") + x(y).toFixed(1) + " " + yy(d[y]).toFixed(1) + " "; prev = y; }
+    s += `<path d="${p}" fill="none" stroke="${COLORS[i]}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="${DASH[i]}"/>`;
+  });
+  $("chart").innerHTML = s + "</svg>";
+  $("picked").innerHTML = picked.map(([n, k], i) => `<span class="pill" style="border-color:${COLORS[i]}">${n} <span style="font-weight:400">(${SEX[k]})</span><button data-i="${i}" aria-label="Remove ${n} (${SEX[k]})">×</button></span>`).join("") || `<span class="msg">Add a name to see its line.</span>`;
+  document.querySelectorAll("#picked button").forEach(b => b.addEventListener("click", () => { picked.splice(+b.dataset.i, 1); clearSets(); draw(); }));
+  let t = "<thead><tr><th>Name</th><th>Best rank</th><th>When</th><th>Years in top 1,000</th></tr></thead><tbody>";
+  picked.forEach(([n, k]) => { const st = stats(n, k); t += `<tr><td>${n} (${SEX[k]})</td><td>#${st.best}</td><td>${st.first === st.last ? st.first : st.first + "–" + st.last}</td><td>${st.count} (${st.y0}–${st.y1})</td></tr>`; });
+  $("tbl").innerHTML = picked.length ? t + "</tbody>" : "";
+}
+function clearSets() { document.querySelectorAll("#sets button").forEach(b => b.setAttribute("aria-pressed", "false")); }
+function add(n, k) {
+  if (picked.some(p => p[0] === n && p[1] === k)) return;
+  if (picked.length >= 4) picked.shift();
+  picked.push([n, k]); clearSets(); draw();
+}
+function suggest() {
+  const v = $("q").value.trim().toLowerCase();
+  if (!v) { $("sugg").innerHTML = ""; return; }
+  const hits = [];
+  ["g", "b"].forEach(k => Object.keys(D[k]).forEach(n => { const l = n.toLowerCase(); if (l.startsWith(v)) hits.push([n, k, l === v ? 0 : 1]); }));
+  hits.sort((a, b) => a[2] - b[2] || a[0].localeCompare(b[0]));
+  $("sugg").innerHTML = hits.length
+    ? hits.slice(0, 8).map(([n, k]) => `<li><button data-n="${n}" data-k="${k}">${n} (${SEX[k]})</button></li>`).join("")
+    : `<li class="msg">No name starting with “${$("q").value.trim().replace(/[<>&]/g, "")}” ever reached the top 1,000. Rare names aren’t in this data.</li>`;
+  document.querySelectorAll("#sugg button").forEach(b => b.addEventListener("click", () => { add(b.dataset.n, b.dataset.k); $("q").value = ""; $("sugg").innerHTML = ""; }));
+}
+function tops() {
+  const y = $("yr").value; $("yrNum").textContent = y;
+  [["g", "topG"], ["b", "topB"]].forEach(([k, id]) => {
+    $(id).innerHTML = D.top[y][k].map(n => `<li><button data-n="${n}" data-k="${k}">${n}</button></li>`).join("");
+    document.querySelectorAll(`#${id} button`).forEach(b => b.addEventListener("click", () => { add(b.dataset.n, b.dataset.k); $("chart").scrollIntoView({ block: "center" }); }));
+  });
+}
+function start() {
+  $("sets").innerHTML = SETS.map((s, i) => `<button data-i="${i}" aria-pressed="${i === 0}">${s[0]}</button>`).join("");
+  document.querySelectorAll("#sets button").forEach(b => b.addEventListener("click", () => {
+    picked = SETS[+b.dataset.i][1].map(p => p.slice()); draw();
+    document.querySelectorAll("#sets button").forEach(o => o.setAttribute("aria-pressed", o === b));
+  }));
+  picked = SETS[0][1].map(p => p.slice());
+  $("q").addEventListener("input", suggest);
+  $("q").addEventListener("keydown", e => { if (e.key === "Enter") { const f = document.querySelector("#sugg button"); if (f) f.click(); } });
+  $("yr").min = D.y0; $("yr").max = D.y1;
+  $("yr").addEventListener("input", tops);
+  draw(); tops();
+}
+fetch("data/names.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(j => { D = j; start(); })
+  .catch(() => { $("chart").innerHTML = `<p class="msg">The name data didn’t load. Check your connection and reload the page. (If you opened this file directly from your computer, it needs to be viewed through the website instead.)</p>`; });
+</script>
+</body>
+</html>
