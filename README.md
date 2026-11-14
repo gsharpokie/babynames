@@ -1,6 +1,6 @@
 # Names in Fashion
 
-An interactive chart of U.S. baby-name popularity from 1880 to 2025. Students look up any name that ever reached the top 1,000, compare up to four names, and browse the top ten for any year. By Gwen Sharp, as a companion to Chapter 5 (Culture) of *A Sociology Experiment*.
+An interactive chart of U.S. baby-name popularity from 1880 to 2025. Students look up any name that ever reached the top 1,000, compare up to four names, and browse the top ten for any year. By Gwen Sharp.
 
 **Live site:** https://gsharpokie.github.io/babynames/
 
